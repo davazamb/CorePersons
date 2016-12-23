@@ -56,7 +56,7 @@ namespace CorePersons
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public async void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IServiceProvider serviceProvider)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -85,26 +85,27 @@ namespace CorePersons
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
             //invoca el servicio createroles
-            await CreateRoles(serviceProvider);
+            //await CreateRoles(serviceProvider);
         }
         //Crear roles de usuario
-        private async Task CreateRoles(IServiceProvider serviceProvider)
-        {
-            var UserManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-            var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+        //private async Task CreateRoles(IServiceProvider serviceProvider)
+        //{
+        //    var UserManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+        //    var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-            string[] rolesNames = { "Admin", "User" };
-            IdentityResult result;
-            foreach (var rolesName in rolesNames)
-            {
-                var roleExist = await RoleManager.RoleExistsAsync(rolesName);
-                if (!roleExist)
-                {
-                    result = await RoleManager.CreateAsync(new IdentityRole(rolesName));
-                }
-
-            } 
-        }
-
+        //    string[] rolesNames = { "Admin", "User" };
+        //    IdentityResult result;
+        //    foreach (var rolesName in rolesNames)
+        //    {
+        //        var roleExist = await RoleManager.RoleExistsAsync(rolesName);
+        //        if (!roleExist)
+        //        {
+        //            result = await RoleManager.CreateAsync(new IdentityRole(rolesName));
+        //        }       
+        //    }
+        //    //id para el usuario admin 
+        //    var user = await UserManager.FindByIdAsync("d42f147f-56a5-41ab-8cba-b670bc48e9c0");
+        //    await UserManager.AddToRoleAsync(user, "Admin");
+        }         
     }
-}
+

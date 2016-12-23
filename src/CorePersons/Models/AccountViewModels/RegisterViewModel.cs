@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -23,5 +24,26 @@ namespace CorePersons.Models.AccountViewModels
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        [DataType(DataType.Text)]
+        [Display(Name = "Perfiles")]
+        [UIHint("List")]
+        public List<SelectListItem> Roles { get; set; }
+        public string Role { get; set; }
+
+        public RegisterViewModel()
+        {
+            Roles = new List<SelectListItem>();
+            Roles.Add(new SelectListItem()
+            {
+                Value = "1",
+                Text = "Admin"
+            });
+            Roles.Add(new SelectListItem()
+            {
+                Value = "2",
+                Text = "User"
+            });
+        }
     }
 }

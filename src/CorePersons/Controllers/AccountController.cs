@@ -92,8 +92,9 @@ namespace CorePersons.Controllers
         [AllowAnonymous]
         public IActionResult Register(string returnUrl = null)
         {
+            RegisterViewModel R = new RegisterViewModel();
             ViewData["ReturnUrl"] = returnUrl;
-            return View();
+            return View(R);
         }
 
         //
