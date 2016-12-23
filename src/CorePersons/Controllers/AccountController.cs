@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using CorePersons.Models;
 using CorePersons.Models.AccountViewModels;
 using CorePersons.Services;
+using CorePersons.Data;
 
 namespace CorePersons.Controllers
 {
@@ -22,19 +23,22 @@ namespace CorePersons.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
+        private readonly ApplicationDbContext _context;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
             ISmsSender smsSender,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
+            _context = context;
         }
 
         //
@@ -93,6 +97,7 @@ namespace CorePersons.Controllers
         public IActionResult Register(string returnUrl = null)
         {
             RegisterViewModel R = new RegisterViewModel();
+            R.getRoles(_context);
             ViewData["ReturnUrl"] = returnUrl;
             return View(R);
         }
@@ -109,6 +114,7 @@ namespace CorePersons.Controllers
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await _userManager.CreateAsync(user, model.Password);
+                await _userManager.AddToRoleAsync(user, model.Role);
                 if (result.Succeeded)
                 {
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
