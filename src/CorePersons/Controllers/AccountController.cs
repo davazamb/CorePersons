@@ -12,6 +12,7 @@ using CorePersons.Models;
 using CorePersons.Models.AccountViewModels;
 using CorePersons.Services;
 using CorePersons.Data;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace CorePersons.Controllers
 {
@@ -24,6 +25,7 @@ namespace CorePersons.Controllers
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
         private readonly ApplicationDbContext _context;
+        private readonly RoleManager<IdentityRole> _roleManager;                 
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
@@ -31,7 +33,8 @@ namespace CorePersons.Controllers
             IEmailSender emailSender,
             ISmsSender smsSender,
             ILoggerFactory loggerFactory,
-            ApplicationDbContext context)
+            ApplicationDbContext context,
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -39,6 +42,7 @@ namespace CorePersons.Controllers
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
             _context = context;
+            _roleManager = roleManager;
         }
 
         //
@@ -97,7 +101,7 @@ namespace CorePersons.Controllers
         public IActionResult Register(string returnUrl = null)
         {
             RegisterViewModel R = new RegisterViewModel();
-            R.getRoles(_context);
+            R.getRoles(_roleManager);
             ViewData["ReturnUrl"] = returnUrl;
             return View(R);
         }

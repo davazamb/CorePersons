@@ -1,4 +1,6 @@
 ﻿using CorePersons.Data;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
@@ -31,36 +33,17 @@ namespace CorePersons.Models.AccountViewModels
         [UIHint("List")]
         public List<SelectListItem> Roles { get; set; }
         public string Role { get; set; }
+        public UsersRoles usersRoles;
 
         public RegisterViewModel()
         {
             Roles = new List<SelectListItem>();
+            usersRoles = new UsersRoles();  
 
-            //Mostrar datos de una lista
-            //Roles.Add(new SelectListItem()
-            //{
-            //    Value = "1",
-            //    Text = "Admin"
-            //});
-            //Roles.Add(new SelectListItem()
-            //{
-            //    Value = "2",
-            //    Text = "User"
-            //});
         }
-        public void getRoles(ApplicationDbContext _context)
-        {
-            //Consulta a la tabla haciendo linq
-            var roles = from r in _context.identityRole select r;
-            var listRole = roles.ToList();
-            foreach (var Data in listRole)
-            {
-                Roles.Add(new SelectListItem()
-                {
-                    Value = Data.Id,
-                    Text = Data.Name
-                });
-            }
+        public void getRoles(RoleManager<IdentityRole> roleManager)
+        {                            
+            Roles = usersRoles.getRoles(roleManager);
         }
     }
 }

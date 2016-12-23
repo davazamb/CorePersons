@@ -24,7 +24,7 @@ namespace CorePersons.Data
         }
 
         public DbSet<Person> Person { get; set; }
-        public DbSet<IdentityRole> identityRole { get; set; }
+        //public DbSet<IdentityRole> identityRole { get; set; }
 
     }
 }
