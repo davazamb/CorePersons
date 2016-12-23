@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using CorePersons.Data;
 using CorePersons.Models;
 using CorePersons.Services;
+using Microsoft.AspNetCore.Identity;
 
 namespace CorePersons
 {
@@ -55,7 +56,7 @@ namespace CorePersons
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public async void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IServiceProvider serviceProvider)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -83,6 +84,27 @@ namespace CorePersons
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+            //invoca el servicio createroles
+            await CreateRoles(serviceProvider);
         }
+        //Crear roles de usuario
+        private async Task CreateRoles(IServiceProvider serviceProvider)
+        {
+            var UserManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+            string[] rolesNames = { "Admin", "User" };
+            IdentityResult result;
+            foreach (var rolesName in rolesNames)
+            {
+                var roleExist = await RoleManager.RoleExistsAsync(rolesName);
+                if (!roleExist)
+                {
+                    result = await RoleManager.CreateAsync(new IdentityRole(rolesName));
+                }
+
+            } 
+        }
+
     }
 }
