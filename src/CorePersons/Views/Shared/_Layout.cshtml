@@ -33,7 +33,9 @@
                 <ul class="nav navbar-nav">
                     @if (SignInManager.IsSignedIn(User))
                     {
-                        <li><a asp-area="" asp-controller="People" asp-action="Index">Home</a></li>          
+                        <li><a asp-area="" asp-controller="People" asp-action="Index">Home</a></li>
+                        <li><a asp-area="" asp-controller="Users" asp-action="Index">Users</a></li>
+
                     }
                     else
                     {
