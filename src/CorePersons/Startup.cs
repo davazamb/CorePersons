@@ -76,6 +76,20 @@ namespace CorePersons
 
             app.UseIdentity();
 
+
+            app.UseFacebookAuthentication(new FacebookOptions()
+            {
+                AppId= "662691887237712",
+                AppSecret= "990dcbed7fcc12d82c73cfcb84f9b25f"
+            });
+
+            app.UseGoogleAuthentication(new GoogleOptions()
+            {
+                ClientId= "642636687466-sd7ce1im0h2s348l8ai42rcvv2qvbnt0.apps.googleusercontent.com",
+                ClientSecret= "z79dIfZru6qKRUHkA8XZfW0H",
+
+            });
+
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
 
             app.UseMvc(routes =>
